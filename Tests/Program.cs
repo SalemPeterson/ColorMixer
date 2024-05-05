@@ -42,7 +42,6 @@ for (int k = 0; k < 1000; k++)
                 case 7: Console.ForegroundColor = ConsoleColor.DarkMagenta; break;
                 case 8: Console.ForegroundColor = ConsoleColor.DarkGray; break;
                 case 9: Console.ForegroundColor = ConsoleColor.Gray; break;
-
             }
             string directionStr = "0";
             Vector2 direction = flowField.velocityField.GetVelocity(i,j);
