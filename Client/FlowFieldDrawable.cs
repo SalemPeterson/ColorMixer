@@ -14,6 +14,7 @@ namespace Client
         {
             canvas.FillColor=Colors.White;
             canvas.FillRectangle(dirtyRect);
+            flowField.velocityField.RandomizeField();
             flowField.Update();
             foreach (var particle in flowField.particles)
             {
