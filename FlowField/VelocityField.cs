@@ -6,25 +6,28 @@ namespace FlowFieldSimulator
     {
         private readonly Vector2[,] field;
 
-        public VelocityField(int width, int height)
+        public VelocityField(float width, float height)
         {
-            field = new Vector2[width, height];
-            RandomizeField(-1, 1);
+            field = new Vector2[(int)width, (int)height];
+            RandomizeField();
         }
 
-        public Vector2 GetVelocity(int x, int y)
+        public Vector2 GetVelocity(float x, float y)
         {
-            return field[x, y];
+            return field[(int)x, (int)y];
         }
 
-        public void RandomizeField(int min, int max)
+        public void RandomizeField()
         {
-            Random rand = new();
-            for (int i = 0; i < field.GetLength(0); i++)
+            FastNoiseLite noise = new(0);
+            noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+
+            for (int x = 0; x < field.GetLength(0); x++)
             {
-                for (int j = 0; j < field.GetLength(1); j++)
+                for (int y = 0; y < field.GetLength(1); y++)
                 {
-                    field[i, j] = new Vector2(rand.Next(min, max + 1), rand.Next(min, max + 1));
+                    double angle = noise.GetNoise(x, y) * Math.PI;
+                    field[x, y] = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
                 }
             }
         }

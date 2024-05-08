@@ -4,42 +4,48 @@ namespace FlowFieldSimulator
 {
     public class FlowField<T>
     {
-        public T?[,] positions;
+        public List<Particle<T>> particles;
         public VelocityField velocityField;
         public delegate T? HandleCollision(T? first, T? second);
-        private readonly HandleCollision handleCollision;
-
-        public FlowField(int width, int height, HandleCollision handleCollision) 
+        public float Width, Height;
+        private float maxSpeed = 4f;
+        public FlowField(float width, float height) 
         {
+            Width = width;
+            Height = height;
             velocityField = new(width, height);
-            positions = new T[width, height];
-            this.handleCollision = handleCollision;
+            particles = [];
         }
-        public void Insert(T obj, int x, int y)
+        public void Insert(T obj, float x, float y)
         {
-            positions[x, y] = handleCollision(obj, positions[x, y]);
+            Particle<T> particle = new(obj, x, y);
+            particle.Velocity = velocityField.GetVelocity(x, y);
+            particles.Add(particle);
         }
         public void Update()
         {
-            int width = positions.GetLength(0);
-            int height = positions.GetLength(1);
-            T?[,] newPositions = new T?[width, height];
-            for (int i = 0; i < width; i++)
+            foreach (var particle in particles)
             {
-                for(int j = 0; j < height; j++)
-                {
-                    Vector2 velocity = velocityField.GetVelocity(i, j);
-                    Vector2 newPosition = velocity + new Vector2(i, j);
-                    newPosition = new Vector2(Mod((int)newPosition.X, width), Mod((int)newPosition.Y, height));
-                    newPositions[(int)newPosition.X, (int)newPosition.Y] = handleCollision(newPositions[(int)newPosition.X, (int)newPosition.Y], positions[i, j]);
-                }
+                particle.Velocity += velocityField.GetVelocity(particle.X, particle.Y);
+                particle.Velocity = Vector2.Clamp(particle.Velocity, new(-maxSpeed,-maxSpeed), new(maxSpeed, maxSpeed));
+                particle.X += particle.Velocity.X;
+                particle.X = Mod(particle.X, Width);
+                particle.Y += particle.Velocity.Y;
+                particle.Y = Mod(particle.Y, Height);
             }
-            positions = newPositions;
         }
 
-        private static int Mod(int a, int b)
+        private static float Mod(float a, float b)
         {
             return ((a % b) + b) % b;
+        }
+
+        public class Particle<Type>(Type obj, float x, float y)
+        {
+            public Type Value = obj;
+            public float X = x;
+            public float Y = y;
+            public Vector2 Velocity = new();
         }
     }
 }
