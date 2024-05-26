@@ -7,6 +7,12 @@
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
+            <HorizontalStackLayout>
+                <Label
+                    Text="Source Mode?"/>
+                <CheckBox
+                    x:Name="SourceModeCheckBox"/>
+            </HorizontalStackLayout>
             <GraphicsView
                 x:Name="PlaySurface"
                 VerticalOptions="Center"
