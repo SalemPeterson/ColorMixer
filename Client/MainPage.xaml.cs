@@ -35,29 +35,31 @@ namespace Client
         {
             flowField.velocityField.RandomizeField();
             flowField.Update();
-            flowField.particles.AsEnumerable();
-            var oldParticles = flowField.particles.ToArray();
             for (int i = flowField.particles.Count - 1; i > 0 ; i--)
             {
                 for (int j = i - 1; j >= 0; j--)
                 {
-                    var particle = oldParticles[i];
+                    var particle = flowField.particles[i];
                     var otherParticle = flowField.particles[j];
-                    if (Vector2.Distance(particle.Position, otherParticle.Position) < particle.Radius + otherParticle.Radius)
+                    var distance = Vector2.Distance(particle.Position, otherParticle.Position);
+                    var minimumDistance = particle.Radius + otherParticle.Radius;
+                    if (distance < minimumDistance)
                     {
-                        flowField.particles[j] = new(
-                            new Color(
-                                (particle.Value.Red + otherParticle.Value.Red) / 2,
-                                (particle.Value.Green + otherParticle.Value.Green) / 2,
-                                (particle.Value.Blue + otherParticle.Value.Blue) / 2,
-                                particle.Value.Alpha + otherParticle.Value.Alpha),
-                            (particle.Position.X + otherParticle.Position.X) / 2,
-                            (particle.Position.Y + otherParticle.Position.Y) / 2,
-                            (float) Math.Sqrt(Math.Pow(particle.Radius, 2) + Math.Pow(otherParticle.Radius, 2))); // sqrt(2)*sqrt(r^2+R^2)
-                        flowField.particles.RemoveAt(i);
+                        var newPosition = particle.Position - otherParticle.Position;
+                        newPosition = Vector2.Normalize(newPosition) * (minimumDistance - distance) / 2 ;
+                        flowField.particles[i].Position += newPosition;
+                        flowField.particles[i].Position.X = Mod(flowField.particles[i].Position.X, (float)PlaySurface.WidthRequest);
+                        flowField.particles[i].Position.Y = Mod(flowField.particles[i].Position.Y, (float)PlaySurface.HeightRequest);
+                        flowField.particles[j].Position -= newPosition;
+                        flowField.particles[j].Position.X = Mod(flowField.particles[j].Position.X, (float)PlaySurface.WidthRequest);
+                        flowField.particles[j].Position.Y = Mod(flowField.particles[j].Position.Y, (float)PlaySurface.HeightRequest);
                     }
                 }
             }
+        }
+        private static float Mod(float a, float b)
+        {
+            return ((a % b) + b) % b;
         }
 
         private void OnScreenClicked(object sender, TappedEventArgs e)
@@ -67,10 +69,10 @@ namespace Client
                 if (SourceModeCheckBox.IsChecked)
                 {
                     fluidSources.Add((new Vector2((float)(e.GetPosition(graphicsView)?.X ?? 0), (float)(e.GetPosition(graphicsView)?.Y ?? 0)), 
-                                     new Color(random.Next(256), random.Next(256), random.Next(256),10)));
+                                     new Color(random.Next(256), random.Next(256), random.Next(256), 75)));
                 }
                 else
-                flowField.Insert(new Color(random.Next(256), random.Next(256), random.Next(256), 10), (int)(e.GetPosition(graphicsView)?.X ?? 0), (int)(e.GetPosition(graphicsView)?.Y ?? 0));
+                flowField.Insert(new Color(random.Next(256), random.Next(256), random.Next(256), 75), (int)(e.GetPosition(graphicsView)?.X ?? 0), (int)(e.GetPosition(graphicsView)?.Y ?? 0));
             }
         }
     }
