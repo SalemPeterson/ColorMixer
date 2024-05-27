@@ -75,6 +75,13 @@ namespace Client
                 flowField.Insert(new Color(random.Next(256), random.Next(256), random.Next(256), 75), (int)(e.GetPosition(graphicsView)?.X ?? 0), (int)(e.GetPosition(graphicsView)?.Y ?? 0));
             }
         }
+        private void OnDeleteSourcesButtonPressed(object sender, EventArgs e)
+        {
+            if (sender == DeleteSourcesButton)
+            {
+                fluidSources.Clear();
+            }
+        }
     }
 
 }

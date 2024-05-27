@@ -12,6 +12,10 @@
                     Text="Source Mode?"/>
                 <CheckBox
                     x:Name="SourceModeCheckBox"/>
+                <Button
+                    x:Name="DeleteSourcesButton"
+                    Pressed="OnDeleteSourcesButtonPressed"
+                    Text="Delte All Sources"/>
             </HorizontalStackLayout>
             <GraphicsView
                 x:Name="PlaySurface"
