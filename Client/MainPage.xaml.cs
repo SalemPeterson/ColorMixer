@@ -96,6 +96,13 @@ namespace Client
                 }
             }
         }
+        private void OnDeleteParticlesButtonPressed(object sender, EventArgs e)
+        {
+            if (sender == DeleteParticlesButton)
+            {
+                flowField.particles.Clear();
+            }
+        }
     }
 
 }

@@ -18,7 +18,7 @@ namespace FlowFieldSimulator
         }
         public void Insert(T obj, float x, float y)
         {
-            Particle<T> particle = new(obj, x, y, 10);
+            Particle<T> particle = new(obj, x, y, 2);
             particle.Velocity = velocityField.GetVelocity(x, y);
             particles.Add(particle);
         }
@@ -47,5 +47,6 @@ namespace FlowFieldSimulator
             public float Radius = radius;
             public Vector2 Velocity = new();
         }
+
     }
 }

@@ -22,6 +22,10 @@
                     x:Name="DeleteSourcesButton"
                     Pressed="OnDeleteSourcesButtonPressed"
                     Text="Delte All Sources"/>
+                <Button
+                    x:Name="DeleteParticlesButton"
+                    Pressed="OnDeleteParticlesButtonPressed"
+                    Text="Delte All Particles"/>
             </HorizontalStackLayout>
             <GraphicsView
                 x:Name="PlaySurface"
