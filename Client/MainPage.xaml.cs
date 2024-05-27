@@ -1,4 +1,5 @@
 ﻿using FlowFieldSimulator;
+using Microsoft.Maui.Controls;
 using System.Numerics;
 using System.Xml.Schema;
 namespace Client
@@ -80,6 +81,19 @@ namespace Client
             if (sender == DeleteSourcesButton)
             {
                 fluidSources.Clear();
+            }
+        }
+        private void OnFillMapButtonPressed(object sender, EventArgs e)
+        {
+            if (sender == FillMapButton)
+            {
+                for (int x = 15; x < (int)PlaySurface.WidthRequest; x += 30)
+                {
+                    for (int y = 15; y < (int)PlaySurface.HeightRequest; y += 30)
+                    {
+                        flowField.Insert(new Color(random.Next(256), random.Next(256), random.Next(256), 75), x, y);
+                    }
+                }
             }
         }
     }

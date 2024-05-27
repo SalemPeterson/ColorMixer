@@ -7,9 +7,15 @@
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
-            <HorizontalStackLayout>
+            <HorizontalStackLayout
+                Spacing="10">
+                <Button
+                    x:Name="FillMapButton"
+                    Pressed="OnFillMapButtonPressed"
+                    Text="Fill map with particles"/>
                 <Label
-                    Text="Source Mode?"/>
+                    Text="Source Mode?"
+                    VerticalTextAlignment="Center"/>
                 <CheckBox
                     x:Name="SourceModeCheckBox"/>
                 <Button
